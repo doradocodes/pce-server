@@ -27,26 +27,28 @@ wss.on('connection', (ws, req) => {
         // If an existing document is found, send its initial state to the client
         const encoder = Y.encodeStateAsUpdate(yDoc);
         ws.send(encoder);
+
+        // Set up the connection with the document (yDoc)
+        setupWSConnection(ws, req, {
+            docName: sketchName,
+            gc: true
+        }, yDoc);
+
+        console.log('Active rooms:');
+        for (const [key, value] of collabSketches) {
+            console.log(`${key}`);
+        }
     }
 
-    // Set up the connection with the document (yDoc)
-    setupWSConnection(ws, req, {
-        docName: sketchName,
-        gc: true
-    }, yDoc);
 
-    console.log('Active rooms:');
-    for (const [key, value] of collabSketches) {
-        console.log(`${key}`);
-    }
 
     ws.on('close', () => {
         console.log('Client disconnected');
 
-        if (yDoc.getMap('awareness').size === 0) {
-            collabSketches.delete(sketchName);
-            console.log(`Room ${sketchName} deleted due to no active clients.`);
-        }
+        // if (yDoc.getMap('awareness').size === 0) {
+        //     collabSketches.delete(sketchName);
+        //     console.log(`Room ${sketchName} deleted due to no active clients.`);
+        // }
     });
 });
 
