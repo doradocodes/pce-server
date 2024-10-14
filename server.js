@@ -47,9 +47,15 @@ wss.on('connection', (ws, req) => {
                 gc: true
             }, yDoc);
         } else {
+            console.error('No document found for room:', roomID);
             ws.send({error: 'No document found for room:' + roomID});
-            // console.error('No document found for room:', roomID);
+            ws.close();
         }
+    }
+
+    console.log('Active rooms:');
+    for (const [key, value] of collabSketches) {
+        console.log(`${key}`);
     }
 
     ws.on('close', () => {
