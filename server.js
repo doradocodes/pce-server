@@ -42,6 +42,8 @@ wss.on('connection', (ws, req) => {
         console.log('Peer connected');
         const yDoc = collabSketches.get(roomID);
         if (yDoc) {
+            const encoder = Y.encodeStateAsUpdate(yDoc);
+            ws.send(encoder);
             setupWSConnection(ws, req, {
                 docName: roomID,
                 gc: true
