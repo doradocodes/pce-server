@@ -6,15 +6,13 @@ const wss = new WebSocket.Server({ port: 1234 });
 
 const collabSketches = new Map();
 
-const serverUrl = "ws://pce-server.glitch.me/1234";
-
-
 wss.on('connection', (ws, req) => {
     console.log('New client connected');
 
     // Extract the room name from the URL (e.g., ws://localhost:1234/my-room)
-    const path = new URL(req.url, serverUrl).pathname;
-    const sketchName = path.slice(path.lastIndexOf('/') + 1);
+    const path = req.url.lastIndexOf('/');
+    const sketchName = req.url.substring(path + 1);
+    console.log('room name:', sketchName);
 
     let yDoc = collabSketches.get(sketchName);
     if (!yDoc) {
