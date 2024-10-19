@@ -59,7 +59,7 @@ console.log('WebSocket server running on ws://localhost:1234');
 
 // Self-ping every 5 minutes to keep server alive
 setInterval(() => {
-    const serverUrl = process.env.NODE_ENV === 'production' ? 'https://pce-server.onrender.com' : 'http://localhost:1234';
+    const serverUrl = process.env.NODE_ENV === 'production' ? prod_env : dev_env;
     console.log('serverUrl', serverUrl);
     const protocol = serverUrl.startsWith('https') ? https : http;
     protocol.get(serverUrl, (res) => {
