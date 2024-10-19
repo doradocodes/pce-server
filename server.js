@@ -1,6 +1,10 @@
 const WebSocket = require('ws');
 const Y = require('yjs');
 const { setupWSConnection } = require('y-websocket/bin/utils');
+const http = require('http');
+
+const dev_env = 'http://localhost:1234';
+const prod_env = 'https://pce-server.onrender.com/1234';
 
 const wss = new WebSocket.Server({ port: 1234 });
 
@@ -51,5 +55,17 @@ wss.on('connection', (ws, req) => {
 });
 
 console.log('WebSocket server running on ws://localhost:1234');
+
+// Self-ping every 5 minutes to keep server alive
+setInterval(() => {
+    const serverUrl = prod_env;
+    http.get(serverUrl, (res) => {
+        res.on('data', (chunk) => {
+            console.log(`Self-ping response: ${chunk}`);
+        });
+    }).on('error', (err) => {
+        console.error('Error pinging self:', err.message);
+    });
+}, 1000); // 5 minutes in milliseconds
 
 module.exports = { documents: collabSketches };
