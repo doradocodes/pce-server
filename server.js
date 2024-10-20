@@ -37,16 +37,9 @@ wss.on('connection', (ws, req) => {
             console.log(`${key}`);
         }
     }
-
-
-
+    
     ws.on('close', () => {
         console.log('Client disconnected');
-
-        // if (yDoc.getMap('awareness').size === 0) {
-        //     collabSketches.delete(sketchName);
-        //     console.log(`Room ${sketchName} deleted due to no active clients.`);
-        // }
     });
 });
 
